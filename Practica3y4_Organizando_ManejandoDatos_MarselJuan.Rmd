@@ -221,7 +221,7 @@ pew_tidy <- pew_religion %>%
     )
   )
 
-head(pew_tidy)
+view(pew_tidy)
 
 ```
 Usamos `gather()` para reunir las columnas de ingresos en `income` y sus valores en `frecuencia`; con `-religion` conservamos la columna que identifica la religión.  
@@ -246,10 +246,24 @@ Consejo: puedes eliminar el prefijo `wk` de las semanas mediante el argumento `n
 
 ```{r}
 
+billboard_tidy <- raw %>%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "semana",
+    names_prefix = "wk",
+    names_transform = list(semana = as.integer),
+    values_to = "posicion",
+    values_drop_na = TRUE
+  ) %>%
+  mutate(
+    date = as.Date(date.entered) + 7 * (semana - 1)
+  )
 
+head(billboard_tidy)
 
 ```
-
+Con `pivot_longer()` reunimos las columnas que empiezan por `wk` en dos columnas: `semana` y `posicion`, conservando los datos que identifican cada canción.  
+Eliminamos el prefijo `wk`, convertimos las semanas a números enteros y descartamos las filas sin posición registrada.  Finalmente, calculamos `date` sumando a la fecha de entrada siete días por cada semana transcurrida; restamos uno porque la semana 1 coincide con la fecha inicial.
 
 ## Varias variables en una misma columna
 
@@ -269,6 +283,10 @@ Para pasar a formato _tidy_ necesitamos realizar dos operaciones en este caso. E
 Convierte el conjunto de datos TB en _tidy_ utilizando `gather` y `separate`.
 
 ```{r}
+
+
+
+
 
 ```
 
