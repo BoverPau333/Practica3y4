@@ -221,7 +221,8 @@ pew_tidy <- pew_religion %>%
     )
   )
 
-view(pew_tidy)
+head(pew_tidy)
+tail(pew_tidy)
 
 ```
 Usamos `gather()` para reunir las columnas de ingresos en `income` y sus valores en `frecuencia`; con `-religion` conservamos la columna que identifica la religión.  
@@ -284,12 +285,28 @@ Convierte el conjunto de datos TB en _tidy_ utilizando `gather` y `separate`.
 
 ```{r}
 
+tb_tidy <- raw %>%
+  gather(
+    key = "grupo",
+    value = "casos",
+    matches("^[mf]"),
+    na.rm = TRUE
+  ) %>%
+  separate(
+    col = grupo,
+    into = c("sexo", "edad"),
+    sep = 1
+  )
 
-
-
+head(tb_tidy)
+tail(tb_tidy)
 
 ```
 
+Usamos `gather()` para reunir las columnas que empiezan por `m` o `f`, seleccionadas con `matches("^[mf]")`, en una columna `grupo` y guardar sus conteos en `casos`.  
+Con `na.rm = TRUE` eliminamos las filas cuyo número de casos es desconocido, conservando los ceros.  
+Después, `separate()` divide `grupo` tras el primer carácter (`sep = 1`), separando el sexo del código de edad; por ejemplo, `m014` pasa a `"m"` y `"014"`.  
+Finalmente, `head()` y `tail()` muestran las primeras y últimas seis filas para revisar el resultado.
 
 ## Variables almacenadas tanto en filas como en columnas
 
