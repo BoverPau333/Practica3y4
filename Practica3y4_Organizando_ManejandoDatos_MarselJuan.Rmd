@@ -426,9 +426,14 @@ Crea un data frame denominado `flights.f` que contenga los vuelos que involucren
 
 ```{r }
 
+flights.f <- flights %>%
+  semi_join(planes.f, by = "tailnum")
 
+head(flights.f)
 
 ```
+Uso `semi_join()` porque queremos **filtrar los vuelos**, conservando aquellos cuyo `tailnum` aparece en `planes.f`, sin añadir columnas ni duplicar filas por coincidencias múltiples.
+`inner_join()` también seleccionaría los vuelos con coincidencia, pero añadiría las características de los aviones. `left_join()` conservaría todos los vuelos, incluidos los que no cumplen los criterios. Con `roght_join()` conservaría todos los aviones de planes.f, incluso los que no tengan vuelos asociados; en esos casos, las columnas del vuelo quedarían como NA. Además, añadirías las características de los aviones.
 
 ### Ejercicio 8
 
@@ -437,6 +442,7 @@ Reasigna los nombres de los data frames `planes.f` y `flights.f` a los nombres o
 ```{r }
 
 ```
+
 
 
 ### Ejercicio 9
