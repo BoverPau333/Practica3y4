@@ -658,19 +658,44 @@ library(ggplot2)
 
 ```{r }
 
+retrasos_tidy <- flights %>% pivot_longer(cols = ends_with("delay"), names_to = "tipo_retraso",
+               values_to = "retraso") 
 
+head(retrasos_tidy)
+
+```
+```{r fig.width= 10, fig.height= 8}
+
+ggplot(retrasos_tidy, aes(x = carrier, y = retraso, fill = tipo_retraso)) +
+  geom_boxplot(position = "dodge") +
+  labs(title = "Retrasos por compañía aérea", x = "Compañía aérea",
+       y = "Retraso (minutos)", fill = "Tipo de retraso") 
+
+ggsave()
 ```
 
 * Representa un gráfico de barras que contenga, para cada compañía aérea (`carrier`), el retraso medio de llegadas, de salidas y el retraso global (nueva variable con el promedio del retraso de salida y el retraso de llegadas). El eje $x$ representará la compañía aérea y el eje $y$ el retraso. Las barras de cada tipo de retraso (llegadas, salidas y global) tendrán un color de relleno diferente (tendrás que modificar el data frame con la función `pivot_longer` para crear una nueva variable que indique el tipo de retraso) y se posicionarán una junto a la otra (no apiladas). No olvides añadir etiquetas en los ejes $x$ e $y$.
 
-```{r }
+```{r fig.width= 10, fig.height= 8}
+retrasos_medios <- flights %>% group_by(carrier) %>%
+  summarise(Llegada = mean(arr_delay, na.rm = TRUE),
+            Salida = mean(dep_delay, na.rm = TRUE)) %>%
+  mutate(Global = (Llegada + Salida) / 2) %>%
+  pivot_longer(cols = c(Llegada, Salida, Global),
+               names_to = "tipo_retraso", values_to = "retraso")
+
+
+ggplot(retrasos_medios, aes(x = carrier, y = retraso, fill = tipo_retraso)) +
+  geom_col(position = "dodge") +
+  labs(title = "Retraso medio por compañía aérea", x = "Compañía aérea",
+       y = "Retraso medio (minutos)", fill = "Tipo de retraso")
 
 
 ```
 
 ¿Cuál de las dos representaciones anteriores es más adecuada para visualizar los retrasos?
 
-
+El grafico de Barras presenta una informacion mucha mas visual y valiosa. Ya que el boxplot con tantos outliers no se entiende nada. En el grafico de Barras con un vistazo podemos ver que compañias tienen mas retraso incluso que AS tiene retraso medio negativo es decir llega antes.
 
 
 
