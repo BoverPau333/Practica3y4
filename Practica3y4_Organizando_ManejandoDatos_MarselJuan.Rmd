@@ -409,6 +409,7 @@ mc_douglas
 airbus <- grep("AIRBUS", unique(planes$manufacturer), value = TRUE)
 airbus
 ```
+Priemro seleciono los nombres de los manufactores mediandete grep.
 
 ```{r}
 planes.f <- planes %>%
@@ -419,7 +420,7 @@ planes.f <- planes %>%
 head(planes.f)
 tail(planes.f)
 ```
-
+Posteriormente filtro por los nombres selecionados y con el mutate junto todos los Airbus en una sola columna.
 ### Ejercicio 7
 
 Crea un data frame denominado `flights.f` que contenga los vuelos que involucren a los aviones presentes en el data frame `planes.f`. Para ello utiliza algunas de las funciones de **XXX_join** y la variable `tailnum` que es común en ambos data frames. 
@@ -470,6 +471,8 @@ names(planes)
 names(flights)
 ```
 
+Quito las columnas que nos pide el enunciado mediante select (-).
+
 ### Ejercicio 10
 
 Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo `character` que incorpore una cadena de texto de la forma `d-m-Y`. Donde `d` indica día, `m` mes e `Y` año, a partir de la información incluida en el data frame. Utiliza una función de **DPLYR** que permita conseguir este propósito. Elimina las variables originales involucradas en la creación de la nueva variable.
@@ -518,14 +521,12 @@ Opcionalmente se puede crear un identificador, `id`, asociado al nombre de la ca
 
 canciones <- billboard_tidy %>%
   select(artist, track, time) %>%
-  unique() %>%
-  mutate(id = row_number())
+  unique() %>% mutate(id = row_number())
 
 
 ranking <- billboard_tidy %>%
   left_join(canciones, by = c("artist", "track", "time")) %>%
-  select(id, semana, posicion) %>%
-  unique()
+  select(id, semana, posicion) %>% unique()
    
 head(ranking)
 head(canciones)
