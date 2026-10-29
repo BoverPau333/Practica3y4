@@ -495,7 +495,7 @@ Utilizando las funciones `group_by`, `summarise` y `filter`, crea un data frame 
 
 ```{r }
 
-total_flights <- flights %>% group_by(tailnum) %>% filter(!is.na(tailnum)) %>%
+Distances_plane <- flights %>% group_by(tailnum) %>% filter(!is.na(tailnum)) %>%
                  summarise(Num_flights = n(), Mean_distance = mean(distance, na.rm = TRUE), Total_distance = sum(distance, na.rm = TRUE))
 
 head(total_flights)
@@ -575,8 +575,16 @@ Consigue un data frame denominado `Distance_Manufacturer_model` que contenga 4 c
 
 ```{r }
 
+Distance_Manufacturer_model <- Distances_plane %>%
+  left_join(planes, by = "tailnum") %>%
+  arrange(desc(Total_distance)) %>%
+  select(tailnum, Total_distance, manufacturer, model)
+
+head(Distance_Manufacturer_model)
 
 ```
+
+Partimos de `Distances_plane`, que contiene las distancias calculadas por avión, y usamos `left_join()` con tailnum para añadir el fabricante y el modelo, conservando todos los registros de la primera tabla.  Con `arrange(desc(Total_distance))` colocamos primero los aviones que han recorrido más distancia, y con `select()` conservamos únicamente las cuatro columnas solicitadas. 
 
 ### Ejercicio Extra 4
 
