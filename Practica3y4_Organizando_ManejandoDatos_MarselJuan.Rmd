@@ -476,6 +476,11 @@ Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo 
 
 ```{r }
 
+flights <- flights %>%
+  mutate(Full_Date = as.Date(paste(day, month, year, sep = "-"),format = "%d-%m-%Y")) %>%
+  select(-day, -month, -year)
+
+head(flights)
 
 ```
 
@@ -484,6 +489,11 @@ Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo 
 Utilizando las funciones `group_by`, `summarise` y `filter`, crea un data frame donde se calcule el número de vuelos (`Num_flights`), la distancia media recorrida (`Mean_distance`) y la distancia total recorrida (`Total_distance`) para cada uno de los aviones (`tailnum`) presentes en el conjunto `flights`. Descarta aquellos registros del data frame en los que la variable `tailnum` tenga un valor NA. Utiliza el operador pipe para enlazar las funciones. Almacena el data frame en una variable denominada `Distances_plane`.  
 
 ```{r }
+
+total_flights <- flights %>% group_by(tailnum) %>% filter(!is.na(tailnum)) %>%
+                 summarise(Num_flights = n(), Mean_distance = mean(distance, na.rm = TRUE), Total_distance = sum(distance, na.rm = TRUE))
+
+head(total_flights)
 
 ```
 
@@ -503,9 +513,24 @@ Opcionalmente se puede crear un identificador, `id`, asociado al nombre de la ca
 
 ```{r}
 
+canciones <- billboard_tidy %>%
+  select(artist, track, time) %>%
+  unique() %>%
+  mutate(id = row_number())
 
+
+ranking <- billboard_tidy %>%
+  left_join(canciones, by = c("artist", "track", "time")) %>%
+  select(id, semana, posicion) %>%
+  unique()
+
+head(ranking)
+head(canciones)
 
 ```
+
+Creamos `canciones` seleccionando artista, título y duración; eliminamos las filas repetidas con `unique()` y asignamos un identificador con `row_number()`.  
+Después, usamos `left_join()` para incorporar ese identificador a los registros semanales y creamos `ranking` conservando solo `id`, `semana` y `posicion`, sin duplicados.
 
 ## TidyR. Una única unidad de observación almacenada en varias tablas
 
