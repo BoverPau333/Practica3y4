@@ -483,6 +483,8 @@ flights <- flights %>%
 head(flights)
 
 ```
+Con `mutate()` creamos `Full_Date`: `paste()` une día, mes y año con guiones y `as.Date()` interpreta ese texto como una fecha según `"%d-%m-%Y"`.  
+Uso **`%Y` mayúscula porque el año tiene cuatro cifras**, como `2013`, ya que sino interpreta incorrectamente la fecha. Finalmente, eliminamos las columnas originales con `select()`.
 
 ### Ejercicio 11
 
@@ -496,7 +498,8 @@ total_flights <- flights %>% group_by(tailnum) %>% filter(!is.na(tailnum)) %>%
 head(total_flights)
 
 ```
-
+Agrupamos los vuelos por matrícula (`tailnum`) y descartamos los registros que no tienen matrícula mediante `filter(!is.na(tailnum))`.  
+Con `summarise()` obtenemos una fila por avión: `n()` cuenta sus vuelos, `mean()` calcula la distancia media y `sum()` la distancia total, ignorando las distancias ausentes con `na.rm = TRUE`.
 
 # Ejercicios Extra
 
@@ -523,7 +526,7 @@ ranking <- billboard_tidy %>%
   left_join(canciones, by = c("artist", "track", "time")) %>%
   select(id, semana, posicion) %>%
   unique()
-
+   
 head(ranking)
 head(canciones)
 
