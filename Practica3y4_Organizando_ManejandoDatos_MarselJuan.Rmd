@@ -208,10 +208,24 @@ Convierte el dataset `pew_religion` a formato _tidy_ usando `gather`. La columna
 
 ```{r}
 
+pew_tidy <- pew_religion %>%
+  gather(
+    key = "income",
+    value = "frecuencia",
+    -religion
+  ) %>%
+  mutate(
+    income = factor(
+      income,
+      levels = names(pew_religion)[-1]
+    )
+  )
 
-
+head(pew_tidy)
 
 ```
+Usamos `gather()` para reunir las columnas de ingresos en `income` y sus valores en `frecuencia`; con `-religion` conservamos la columna que identifica la religión.  
+Después, `mutate()` convierte `income` en un factor, manteniendo el orden de las columnas originales mediante `levels = names(pew_religion)[-1]`.  
 
 Otro ejemplo usando el conjunto de datos `Billboard` que muestra cuando una canción entró en el top 100.
 
@@ -231,6 +245,7 @@ Obtén la versión _tidy_ de este conjunto de datos usando `pivot_longer`.
 Consejo: puedes eliminar el prefijo `wk` de las semanas mediante el argumento `names_prefix`. Opcionalmente puedes crear una columna `date` a partir de `date.entered`, sumando las semanas transcurridas desde la fecha de entrada en lista.
 
 ```{r}
+
 
 
 ```
