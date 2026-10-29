@@ -286,17 +286,8 @@ Convierte el conjunto de datos TB en _tidy_ utilizando `gather` y `separate`.
 ```{r}
 
 tb_tidy <- raw %>%
-  gather(
-    key = "grupo",
-    value = "casos",
-    matches("^[mf]"),
-    na.rm = TRUE
-  ) %>%
-  separate(
-    col = grupo,
-    into = c("sexo", "edad"),
-    sep = 1
-  )
+  gather(key = "grupo", value = "casos", matches("^[mf]"), na.rm = TRUE) %>%
+  separate(col = grupo, into = c("sexo", "edad"), sep = 1)
 
 head(tb_tidy)
 tail(tb_tidy)
@@ -324,38 +315,29 @@ Para obtener la versión _tidy_ primero juntamos todos los días en una variable
 ### Ejercicio 4 
 
 Obtén la versión _tidy_ del conjunto de datos `weather` utilizando las funciones `pivot_longer` y `pivot_wider`. Además cambiaremos las columnas `year`, `month` y `dia` por una única variable `fecha`. Para que la operación `pivot_wider` no de error tendremos que eliminar los NA's cuando usemos `pivot_longer`.
+
 ```{r}
-names(weather)
+names(raw)
 ```
 
 
 ```{r}
 
 weather_tidy <- raw %>%
-  pivot_longer(
-    cols = matches("^d[0-9]"),
-    names_to = "dia",
-    names_prefix = "d",
-    names_transform = list(dia = as.integer),
-    values_to = "valor",
-    values_drop_na = TRUE
-  ) %>%
-  pivot_wider(
-    names_from = element,
-    values_from = valor
-  ) %>%
-  unite(
-    col = "fecha",
-    year, month, dia,
-    sep = "-"
-  ) %>%
+  pivot_longer(cols = matches("^d[0-9]"), names_to = "dia", names_prefix = "d",
+               names_transform = list(dia = as.integer), values_to = "valor",
+               values_drop_na = TRUE) %>%
+  pivot_wider(names_from = element, values_from = valor) %>%
+  unite(col = "fecha", year, month, dia, sep = "-") %>%
   mutate(fecha = as.Date(fecha)) %>%
   arrange(id, fecha)
 
 head(weather_tidy)
 
 ```
-
+Con `pivot_longer()` reunimos las columnas de días en `dia` y sus mediciones en `valor`, eliminamos el prefijo `d`, convertimos el día a entero y descartamos los valores ausentes.  
+Después, `pivot_wider()` transforma los valores de `element`, como `tmin` y `tmax`, en columnas independientes con sus mediciones.  
+Finalmente, unimos año, mes y día en `fecha`, la convertimos al tipo `Date`, ordenamos por estación y fecha y mostramos las primeras filas con `head()`.
 
 # DPLYR 
 
@@ -399,6 +381,10 @@ load("./data/VuelosNY.Rdata")
 Muestra las primeras muestras de ambos data frames para hacerte una idea de las variables que contienen. ¿Qué diferencia existe entre la información mostrada en ambos data frames?
 
 ```{r }
+head(flights)
+str(flights)
+head(planes)
+str(planes)
 
 ```
 
