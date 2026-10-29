@@ -2,15 +2,15 @@
 title: "Práctica 3 y 4. Preparación y manejo de Datos"
 subtitle: "Análisis Exploratorio de Datos, Máster en Ciencia de Datos - UV"
 output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: no
   html_document:
     echo: yes
     number_sections: no
     theme: lumen
     toc: yes
-  pdf_document:
-    toc: yes
-    toc_depth: 3
-    number_sections: no
 ---
 
 ```{r setup, cache=F, echo=F, message=F, warning=F, tidy=F}
@@ -498,7 +498,7 @@ Utilizando las funciones `group_by`, `summarise` y `filter`, crea un data frame 
 Distances_plane <- flights %>% group_by(tailnum) %>% filter(!is.na(tailnum)) %>%
                  summarise(Num_flights = n(), Mean_distance = mean(distance, na.rm = TRUE), Total_distance = sum(distance, na.rm = TRUE))
 
-head(total_flights)
+head(Distances_plane)
 
 ```
 Agrupamos los vuelos por matrícula (`tailnum`) y descartamos los registros que no tienen matrícula mediante `filter(!is.na(tailnum))`.  
@@ -671,7 +671,6 @@ ggplot(retrasos_tidy, aes(x = carrier, y = retraso, fill = tipo_retraso)) +
   labs(title = "Retrasos por compañía aérea", x = "Compañía aérea",
        y = "Retraso (minutos)", fill = "Tipo de retraso") 
 
-ggsave()
 ```
 
 * Representa un gráfico de barras que contenga, para cada compañía aérea (`carrier`), el retraso medio de llegadas, de salidas y el retraso global (nueva variable con el promedio del retraso de salida y el retraso de llegadas). El eje $x$ representará la compañía aérea y el eje $y$ el retraso. Las barras de cada tipo de retraso (llegadas, salidas y global) tendrán un color de relleno diferente (tendrás que modificar el data frame con la función `pivot_longer` para crear una nueva variable que indique el tipo de retraso) y se posicionarán una junto a la otra (no apiladas). No olvides añadir etiquetas en los ejes $x$ e $y$.
