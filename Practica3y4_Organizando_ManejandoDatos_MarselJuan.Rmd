@@ -388,6 +388,9 @@ str(planes)
 
 ```
 
+
+La difencia esta en que ambos dataseets contienen informacion diferente, el primer data frame contiene **336.776 vuelos**, con una fila por vuelo e información sobre fechas, horarios, retrasos, aeropuertos, distancia y tiempo de vuelo. El segundo contiene **3.322 aviones**, con una fila por avión y sus características: fabricante, modelo, motores y asientos. Lo unico que comparten es `tailnum`, la matrícula que permite relacionar cada vuelo con su avión. **`year` tiene distinto significado**: en el primero es el año del vuelo y en el segundo, el año de fabricación del avión.
+
 ### Ejercicio 6
 
 En nuestro estudio queremos aplicar una serie de criterios de exclusión sobre las muestras de ambos data frames. En concreto queremos eliminar los aviones fabricados por el fabricante MCDONELL DOUGLAS (vigila si existe más de una denominación de esta compañía en la variable `manufacturer`). Del mismo modo, queremos seleccionar aquellos aviones en los que el número de asientos esté entre 90 y 210 (variable `seats`). Aplica las dos operaciones de filtrado secuencialmente utilizando el operador _pipe_ y almacena el data frame resultante en `planes.f`. En el data frame resultante unifica las denominaciones del fabricante `AIRBUS` bajo la denominación `"AIRBUS COMP"`.
@@ -395,17 +398,34 @@ En nuestro estudio queremos aplicar una serie de criterios de exclusión sobre l
 * Nota: Revisar el uso de la función filter vista en clase y tener en cuenta los operadores de comparación: igual ==, distinto !=, mayor >, mayor o igual >=, menor <, menor o igual <=.
 
 ```{r }
+library(dplyr)
+#help(filter)
 
+#unique(planes$manufacturer)
 
+mc_douglas <- grep("DOUGLAS", unique(planes$manufacturer), value = TRUE)
+mc_douglas
 
+airbus <- grep("AIRBUS", unique(planes$manufacturer), value = TRUE)
+airbus
 ```
 
+```{r}
+planes.f <- planes %>%
+  filter(!manufacturer %in% mc_douglas) %>%
+  filter(seats >= 90, seats <= 210) %>%
+  mutate(manufacturer = if_else(manufacturer %in% airbus,"AIRBUS COMP", manufacturer))
+
+head(planes.f)
+tail(planes.f)
+```
 
 ### Ejercicio 7
 
 Crea un data frame denominado `flights.f` que contenga los vuelos que involucren a los aviones presentes en el data frame `planes.f`. Para ello utiliza algunas de las funciones de **XXX_join** y la variable `tailnum` que es común en ambos data frames. 
 
 ```{r }
+
 
 
 ```
